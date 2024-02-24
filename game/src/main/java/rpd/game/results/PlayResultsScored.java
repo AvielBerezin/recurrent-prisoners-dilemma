@@ -23,7 +23,7 @@ public record PlayResultsScored(FirstStepScored firstStep,
     public JSONValue toJson() {
         return JSONObject.of(Map.of("firstStep", firstStep.toJson(),
                                     "steps", JSONArray.of(steps.stream()
-                                                               .map(stepScored -> stepScored.toJson())
+                                                               .map(StepScored::toJson)
                                                                .toList())));
     }
 }
