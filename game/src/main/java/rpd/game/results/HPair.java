@@ -1,6 +1,10 @@
 package rpd.game.results;
 
+import rpd.game.json.JSONArray;
+import rpd.game.json.JSONValue;
+
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public class HPair<Value> extends ArrayList<Value> {
     public HPair(Value value0, Value value1) {
@@ -19,5 +23,10 @@ public class HPair<Value> extends ArrayList<Value> {
 
     public Value second() {
         return get(1);
+    }
+
+    public JSONValue toJson(Function<Value, JSONValue> mapper) {
+        return JSONArray.of(mapper.apply(first()),
+                            mapper.apply(second()));
     }
 }
