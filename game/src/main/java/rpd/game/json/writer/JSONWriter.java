@@ -5,7 +5,6 @@ import rpd.game.json.*;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,19 +53,19 @@ public class JSONWriter {
                 }
                 printWriter.write("\"");
                 printWriter.write(string.replaceAll(Pattern.quote("\\"),
-                                                 Matcher.quoteReplacement("\\\\"))
-                                     .replaceAll(Pattern.quote("\""),
-                                                 Matcher.quoteReplacement("\\\""))
-                                     .replaceAll(Pattern.quote("\n"),
-                                                 Matcher.quoteReplacement("\\n"))
-                                     .replaceAll(Pattern.quote("\b"),
-                                                 Matcher.quoteReplacement("\\b"))
-                                     .replaceAll(Pattern.quote("\f"),
-                                                 Matcher.quoteReplacement("\\f"))
-                                     .replaceAll(Pattern.quote("\r"),
-                                                 Matcher.quoteReplacement("\\r"))
-                                     .replaceAll(Pattern.quote("\t"),
-                                                 Matcher.quoteReplacement("\\t")));
+                                                    Matcher.quoteReplacement("\\\\"))
+                                        .replaceAll(Pattern.quote("\""),
+                                                    Matcher.quoteReplacement("\\\""))
+                                        .replaceAll(Pattern.quote("\n"),
+                                                    Matcher.quoteReplacement("\\n"))
+                                        .replaceAll(Pattern.quote("\b"),
+                                                    Matcher.quoteReplacement("\\b"))
+                                        .replaceAll(Pattern.quote("\f"),
+                                                    Matcher.quoteReplacement("\\f"))
+                                        .replaceAll(Pattern.quote("\r"),
+                                                    Matcher.quoteReplacement("\\r"))
+                                        .replaceAll(Pattern.quote("\t"),
+                                                    Matcher.quoteReplacement("\\t")));
                 printWriter.write("\"");
             }
 

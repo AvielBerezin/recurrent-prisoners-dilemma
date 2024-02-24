@@ -8,7 +8,7 @@ import java.util.List;
 
 public record PlayResults(FirstStep firstStep,
                           List<Step> steps) {
-    public PlayResults(FirstStep firstStep, Step ...steps) {
+    public PlayResults(FirstStep firstStep, Step... steps) {
         this(firstStep, List.of(steps));
     }
 

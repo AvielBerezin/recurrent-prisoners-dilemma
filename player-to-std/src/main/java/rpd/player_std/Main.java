@@ -20,12 +20,12 @@ public class Main {
                 choice = Option.valueOf(line);
             } catch (IllegalArgumentException e) {
                 System.err.println("opponent made an illegal move " +
-                        line.replaceAll(Pattern.quote("\\"),
-                                        Matcher.quoteReplacement("\\\\"))
-                                .replaceAll(Pattern.quote("\n"),
-                                        Matcher.quoteReplacement("\\n"))
-                                .replaceAll(Pattern.quote("\""),
-                                        Matcher.quoteReplacement("\\\"")));
+                                   line.replaceAll(Pattern.quote("\\"),
+                                                   Matcher.quoteReplacement("\\\\"))
+                                       .replaceAll(Pattern.quote("\n"),
+                                                   Matcher.quoteReplacement("\\n"))
+                                       .replaceAll(Pattern.quote("\""),
+                                                   Matcher.quoteReplacement("\\\"")));
                 System.err.println("Choices available: " + Arrays.toString(Option.values()));
                 return;
             }
