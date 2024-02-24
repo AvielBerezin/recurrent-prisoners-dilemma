@@ -31,7 +31,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>rpd.game.Main</mainClass>
+                            <mainClass>rpd.game.SinglePlay</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,16 +1,16 @@
 package rpd.player.impl;
 
-import rpd.player.Choice;
+import rpd.player.Option;
 import rpd.player.Player;
 
 public class PlayerImpl implements Player {
     @Override
-    public Choice opening() {
-        return Choice.COLLABORATE;
+    public Option opening() {
+        return Option.COLLABORATE;
     }
 
     @Override
-    public Choice onGameStep(Choice previousOponentChoice) {
-        return previousOponentChoice;
+    public Option onGameStep(Option previousOponentAction) {
+        return previousOponentAction;
     }
 }

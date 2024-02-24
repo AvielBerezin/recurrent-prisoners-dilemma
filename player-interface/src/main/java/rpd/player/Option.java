@@ -1,5 +1,5 @@
 package rpd.player;
 
-public enum Choice {
+public enum Option {
    COLLABORATE, COUNTERACT
 }
