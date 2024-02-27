@@ -10,7 +10,7 @@ public class PlayerImpl implements Player {
     }
 
     @Override
-    public Option onGameStep(Option previousOponentAction) {
-        return previousOponentAction;
+    public Option onGameStep(Option previousOpponentAction) {
+        return previousOpponentAction;
     }
 }
