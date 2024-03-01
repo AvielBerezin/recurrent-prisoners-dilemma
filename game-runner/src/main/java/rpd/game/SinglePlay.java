@@ -237,11 +237,12 @@ public class SinglePlay {
     private static <T> T throwForInvalidChoice(int player, ReceivedInvalidChoice invalidChoice) {
         throw new RuntimeException(
                 "invalid choice made by player " + player +
-                " " +
-                invalidChoice.line()
-                             .replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"))
-                             .replaceAll(Pattern.quote("\n"), Matcher.quoteReplacement("\\n"))
-                             .replaceAll(Pattern.quote("\""), Matcher.quoteReplacement("\\\"")));
+                        " \"" +
+                        invalidChoice.line()
+                                .replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"))
+                                .replaceAll(Pattern.quote("\n"), Matcher.quoteReplacement("\\n"))
+                                .replaceAll(Pattern.quote("\""), Matcher.quoteReplacement("\\\"")) +
+                        "\"");
     }
 
     private static ReceivedChoice getReceivedChoice(String line) {

@@ -17,9 +17,7 @@
 
     <modules>
         <module>game-runner</module>
-        <module>player-to-std</module>
         <module>player-interfaces</module>
-        <module>player-examples/TitForTat</module>
         <module>rpd-javafx-gui</module>
         <module>JsonUtils</module>
         <module>game-results</module>

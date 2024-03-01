@@ -1,3 +1,3 @@
-.\player-to-std\run.bat
-.\player-to-std\run.bat
-.\player-to-std\run.bat
+.\player-to-std\run-tit-for-tat.bat
+.\player-to-std\run-tit-for-tat.bat
+.\player-to-std\run-random-player.bat
