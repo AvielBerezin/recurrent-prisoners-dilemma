@@ -1,2 +1,0 @@
-.\player-to-std\run.bat
-.\player-to-std\run.bat
