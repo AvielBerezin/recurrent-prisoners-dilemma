@@ -3,6 +3,7 @@ package rpd.game;
 import rpd.game.results.basic.RoundCompetitors;
 import rpd.game.results.scored.RoundResultScored;
 import rpd.game.results.scored.TournamentResultScored;
+import rpd.json.values.writer.JSONWriter;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -21,8 +22,6 @@ import static java.util.Collections.shuffle;
 import static rpd.game.SinglePlay.runPlay;
 
 public class Tournament {
-
-
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             System.err.println("expected 1 argument <competitors file> but received " + args.length);
@@ -41,7 +40,7 @@ public class Tournament {
                                                .collect(Collectors.toCollection(ArrayList::new));
         Random random = new Random();
         shuffle(rounds, random);
-        int iterations = 30;
+        int iterations = 10;
         List<RoundResultScored> results = rounds.stream()
                                                 .map(roundCompetitors -> new RoundResultScored(roundCompetitors,
                                                                                                runPlay(random, iterations,
@@ -50,6 +49,7 @@ public class Tournament {
                                                                                                        .scored()))
                                                 .toList();
         TournamentResultScored tournamentResult = new TournamentResultScored(iterations, results);
+        JSONWriter.compactWrite(tournamentResult.toJson()).accept(System.out);
         //noinspection InfiniteLoopStatement
         while (true) {
             //noinspection resource
@@ -58,8 +58,9 @@ public class Tournament {
                             .getOutputStream())) {
                 inputStream.writeObject(tournamentResult);
             } catch (Exception exception) {
-                System.err.println("an exception occurred while streaming tournament results to display server");
-                exception.printStackTrace();
+                // TODO: integrate with a logging framework
+//                System.err.println("an exception occurred while streaming tournament results to display server");
+//                exception.printStackTrace();
             }
         }
     }

@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import static java.lang.System.exit;
 import static java.util.function.Function.identity;
-import static rpd.game.Utils.zip;
+import static rpd.game.results.Utils.zip;
 
 public class SinglePlay {
     public static void main(String[] args) {

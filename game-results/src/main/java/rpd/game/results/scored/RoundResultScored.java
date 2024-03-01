@@ -14,5 +14,4 @@ public record RoundResultScored(RoundCompetitors play,
         return JSONObject.of(Map.of("play", play.toJson(),
                                     "playResultsScored", playResultsScored.toJson()));
     }
-
 }

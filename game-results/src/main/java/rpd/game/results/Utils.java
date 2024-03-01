@@ -1,4 +1,4 @@
-package rpd.game;
+package rpd.game.results;
 
 import java.util.Iterator;
 import java.util.Spliterator;
