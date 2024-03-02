@@ -11,6 +11,10 @@ public class Actions extends HPair<Option> implements Serializable {
         super(action0, action1);
     }
 
+    public Actions(HPair<? extends Option> options) {
+        super(options);
+    }
+
     public Experiences intoExperiences() {
         return new Experiences(second(), first());
     }

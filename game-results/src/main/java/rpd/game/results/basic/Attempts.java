@@ -11,6 +11,10 @@ public class Attempts extends HPair<Option> implements Serializable {
         super(choice0, option1);
     }
 
+    public Attempts(HPair<? extends Option> options) {
+        super(options);
+    }
+
     public JSONValue toJson() {
         return super.toJson(value -> new JSONString(value.name()));
     }

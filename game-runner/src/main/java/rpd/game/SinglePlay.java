@@ -18,6 +18,7 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class SinglePlay {
             exit(1);
             return;
         }
-        PlayResultsScored playResultsScored = runPlay(new Random(), iterations, args[1], args[2]).scored();
+        PlayResultsScored playResultsScored = runPlay(new Random(), iterations, HPair.of(args[1], args[2])).scored();
         System.out.println(playResultsToString(iterations, playResultsScored));
     }
 
@@ -149,37 +150,28 @@ public class SinglePlay {
                      .toList();
     }
 
-    public static PlayResults runPlay(Random random, int iterations, String command0, String command1) {
+    public static PlayResults runPlay(Random random, int iterations, HPair<String> commands) {
         Process process1;
         try {
-            process1 = new ProcessBuilder().command(command0).start();
+            process1 = new ProcessBuilder().command(commands.first()).start();
         } catch (IOException e) {
             throw new RuntimeException("failed on process 0", e);
         }
         Process process2;
         try {
-            process2 = new ProcessBuilder().command(command1).start();
+            process2 = new ProcessBuilder().command(commands.second()).start();
         } catch (IOException e) {
             throw new RuntimeException("failed on process 1", e);
         }
-        HPair<Process> playerProcesses =
-                HPair.of(process1,
-                         process2);
-        HPair<Scanner> playerOutput =
-                HPair.of(new Scanner(playerProcesses.get(0).getInputStream()),
-                         new Scanner(playerProcesses.get(1).getInputStream()));
-        HPair<PrintStream> playerInput =
-                HPair.of(new PrintStream(playerProcesses.get(0).getOutputStream()),
-                         new PrintStream(playerProcesses.get(1).getOutputStream()));
-        HPair<List<Option>> attempts =
-                HPair.of(new ArrayList<>(iterations),
-                         new ArrayList<>(iterations));
-        HPair<List<Option>> actions =
-                HPair.of(new ArrayList<>(iterations),
-                         new ArrayList<>(iterations));
-        HPair<List<Boolean>> forceBadActions =
-                HPair.of(random.doubles(iterations).mapToObj(chance -> chance < 0.1).toList(),
-                         random.doubles(iterations).mapToObj(chance -> chance < 0.1).toList());
+        HPair<Process> playerProcesses = HPair.of(process1, process2);
+        HPair<Scanner> playerOutput = playerProcesses.map(Process::getInputStream).map(Scanner::new);
+        HPair<PrintStream> playerInput = playerProcesses.map(Process::getOutputStream).map(PrintStream::new);
+        HPair<List<Option>> attempts = HPair.of(iterations, iterations).map(ArrayList::new);
+        HPair<List<Option>> actions = HPair.of(iterations, iterations).map(ArrayList::new);
+        HPair<List<Boolean>> forceBadActions = HPair.of(iterations, iterations)
+                                                    .map(random::doubles)
+                                                    .map(doubles -> doubles.mapToObj(change -> change < 0.1))
+                                                    .map(Stream::toList);
         try (ExecutorService executor = Executors.newFixedThreadPool(2)) {
             for (int player_ = 0; player_ < 2; player_++) {
                 final int player = player_;
@@ -210,39 +202,37 @@ public class SinglePlay {
                 });
             }
         }
+        FirstStep firstStep = new FirstStep(new Attempts(attempts.map(getterOfIndex(0))),
+                                            new Actions(actions.map(getterOfIndex(0))));
         List<Step> steps = new ArrayList<>(iterations - 1);
-        FirstStep firstStep = new FirstStep(new Attempts(attempts.first().get(0),
-                                                         attempts.second().get(0)),
-                                            new Actions(actions.first().get(0),
-                                                        actions.second().get(0)));
         if (iterations == 1) {
-            return new PlayResults(firstStep);
+            return new PlayResults(firstStep, steps);
         }
         steps.add(new Step(firstStep.currentExperiences(),
-                           new Attempts(attempts.first().get(1),
-                                        attempts.second().get(1)),
-                           new Actions(actions.first().get(1),
-                                       actions.second().get(1))));
+                           new Attempts(attempts.map(getterOfIndex(1))),
+                           new Actions(actions.map(getterOfIndex(1)))));
         for (int i = 1; i < iterations - 1; i++) {
             steps.add(new Step(steps.get(i - 1).currentExperiences(),
-                               new Attempts(attempts.first().get(i),
-                                            attempts.second().get(i)),
-                               new Actions(actions.first().get(i),
-                                           actions.second().get(i))));
+                               new Attempts(attempts.map(getterOfIndex(i + 1))),
+                               new Actions(actions.map(getterOfIndex(i + 1)))));
         }
         return new PlayResults(firstStep, steps);
+    }
+
+    private static <Option> Function<List<Option>, Option> getterOfIndex(int index) {
+        return options -> options.get(index);
     }
 
     @SuppressWarnings("UnusedReturnValue")
     private static <T> T throwForInvalidChoice(int player, ReceivedInvalidChoice invalidChoice) {
         throw new RuntimeException(
                 "invalid choice made by player " + player +
-                        " \"" +
-                        invalidChoice.line()
-                                .replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"))
-                                .replaceAll(Pattern.quote("\n"), Matcher.quoteReplacement("\\n"))
-                                .replaceAll(Pattern.quote("\""), Matcher.quoteReplacement("\\\"")) +
-                        "\"");
+                " \"" +
+                invalidChoice.line()
+                             .replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"))
+                             .replaceAll(Pattern.quote("\n"), Matcher.quoteReplacement("\\n"))
+                             .replaceAll(Pattern.quote("\""), Matcher.quoteReplacement("\\\"")) +
+                "\"");
     }
 
     private static ReceivedChoice getReceivedChoice(String line) {

@@ -14,7 +14,7 @@ public record Step(Experiences previousExperiences,
                    Actions actions)
         implements Serializable {
     public Experiences currentExperiences() {
-        return new Experiences(actions.second(), actions.first());
+        return new Experiences(actions.swap());
     }
 
     public JSONValue toJson() {

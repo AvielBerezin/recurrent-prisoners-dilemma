@@ -7,11 +7,11 @@ import rpd.json.values.JSONValue;
 import java.io.Serializable;
 import java.util.Map;
 
-public record RoundResultScored(RoundCompetitors play,
-                                PlayResultsScored playResultsScored)
+public record RoundResultScored(RoundCompetitors competitors,
+                                PlayResultsScored results)
         implements Serializable {
     public JSONValue toJson() {
-        return JSONObject.of(Map.of("play", play.toJson(),
-                                    "playResultsScored", playResultsScored.toJson()));
+        return JSONObject.of(Map.of("competitors", competitors.toJson(),
+                                    "results", results.toJson()));
     }
 }

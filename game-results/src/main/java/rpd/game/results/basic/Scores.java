@@ -11,6 +11,10 @@ public class Scores extends HPair<Integer> implements Serializable {
         super(score0, score1);
     }
 
+    public Scores(HPair<? extends Integer> integers) {
+        super(integers);
+    }
+
     public Scores plus(Scores addition) {
         return new Scores(first() + addition.first(),
                           second() + addition.second());

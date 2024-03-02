@@ -14,6 +14,10 @@ public class HPair<Value> extends ArrayList<Value> {
         this.add(value1);
     }
 
+    public HPair(HPair<? extends Value> values) {
+        this(values.first(), values.second());
+    }
+
     public static <Value> HPair<Value> of(Value value0, Value value1) {
         return new HPair<>(value0, value1);
     }
@@ -24,6 +28,10 @@ public class HPair<Value> extends ArrayList<Value> {
 
     public Value second() {
         return get(1);
+    }
+
+    public HPair<Value> swap() {
+        return new HPair<>(second(), first());
     }
 
     public <MValue> HPair<MValue> map(Function<Value, MValue> mapper) {

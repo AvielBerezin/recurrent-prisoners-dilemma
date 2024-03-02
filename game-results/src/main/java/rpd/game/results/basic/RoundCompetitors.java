@@ -10,6 +10,10 @@ public class RoundCompetitors extends HPair<Integer> implements Serializable {
         super(index0, index1);
     }
 
+    public RoundCompetitors(HPair<? extends Integer> integers) {
+        super(integers);
+    }
+
     public JSONValue toJson() {
         return super.toJson(JSONNumber::new);
     }

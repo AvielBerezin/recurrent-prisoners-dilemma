@@ -11,6 +11,10 @@ public class Experiences extends HPair<Option> implements Serializable {
         super(experience0, experience1);
     }
 
+    public Experiences(HPair<? extends Option> options) {
+        super(options);
+    }
+
     public JSONValue toJson() {
         return super.toJson(option -> new JSONString(option.name()));
     }
