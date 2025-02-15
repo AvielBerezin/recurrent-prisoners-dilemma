@@ -39,7 +39,11 @@ public class ReflectiveObjectSerializerByFieldsAndGetters<JavaClass> implements 
             if (serializer.isEmpty()) {
                 continue;
             }
-            map.put(fieldName, serializer.get().serialize(value));
+            try {
+                map.put(fieldName, serializer.get().serialize(value));
+            } catch (JsonSerializationException e) {
+                throw new JsonSerializationException("failed to serialize " + fieldName, e);
+            }
         }
         return map;
     }

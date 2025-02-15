@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 public final class TournamentResultScored implements Serializable {
     private final List<String> competitorsNames;
     private final Map<RoundCompetitors, PlayResultsScored> rounds;
-    private final Map<Integer, Integer> totalScores;
+    private final List<Integer> totalScores;
     private final int iterations;
 
     public TournamentResultScored(int iterations, List<String> competitorsNames, List<RoundResultScored> roundsListed) {
@@ -46,22 +46,22 @@ public final class TournamentResultScored implements Serializable {
         return new RoundsMap(competitorsCount, roundsData, keySet);
     }
 
-    private static Map<Integer, Integer> calculateTotalScores(List<String> competitorsNames, Map<RoundCompetitors, PlayResultsScored> rounds) {
-        HashMap<Integer, Integer> totalScores = new HashMap<>();
+    private static List<Integer> calculateTotalScores(List<String> competitorsNames, Map<RoundCompetitors, PlayResultsScored> rounds) {
+        ArrayList<Integer> totalScores = new ArrayList<>();
         for (int player = 0; player < competitorsNames.size(); player++) {
-            totalScores.put(player, 0);
+            totalScores.add(0);
         }
         rounds.forEach((play, round) -> {
             for (int i = 0; i < play.size(); i++) {
-                totalScores.put(play.get(i),
+                totalScores.set(play.get(i),
                                 totalScores.get(play.get(i)) +
                                 round.getFinalScores().get(i));
             }
         });
-        return Collections.unmodifiableMap(totalScores);
+        return Collections.unmodifiableList(totalScores);
     }
 
-    public Map<Integer, Integer> getTotalScores() {
+    public List<Integer> getTotalScores() {
         return totalScores;
     }
 

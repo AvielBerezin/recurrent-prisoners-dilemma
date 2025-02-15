@@ -5,6 +5,7 @@ import rpd.json.values.*;
 import rpd.json.values.writer.JSONWriter;
 
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 class SerializationTest {
     public record A(int a, boolean b, String c) {

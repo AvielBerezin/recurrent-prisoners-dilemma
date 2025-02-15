@@ -6,6 +6,7 @@ import rpd.reflective.Utils;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class Serializers {
     public static <JavaClass> Serializer<JavaClass, JSONObject> reflectiveByFields(Class<? extends JavaClass> classToReflectUpon,
@@ -90,18 +91,22 @@ public class Serializers {
         };
     }
 
-    @SuppressWarnings("unchecked")
     public static Serializer<Object, JSONValue> generalSerializer() {
+        return generalSerializer(UnaryOperator.identity());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Serializer<Object, JSONValue> generalSerializer(UnaryOperator<Serializer<Object, JSONValue>> serializationModifier) {
         return combinedSerializer(List.of(
                 generalize(Boolean.class, booleanSerializer()),
                 generalize(Number.class, numberSerializer()),
                 generalize(String.class, stringSerializer()),
-                generalize((Class<Map<?, ?>>) (Object) Map.class, generalizeMap(mapSerializer(_ -> Optional.of(generalSerializer())))),
-                typeToBeSerialized -> generalize((Class<List<?>>) (Object) List.class, listSerializer(generalSerializer())).serialize(typeToBeSerialized),
+                generalize((Class<Map<?, ?>>) (Object) Map.class, generalizeMap(mapSerializer(_ -> Optional.of(serializationModifier.apply(generalSerializer(serializationModifier)))))),
+                typeToBeSerialized -> generalize((Class<List<?>>) (Object) List.class, listSerializer(serializationModifier.apply(generalSerializer(serializationModifier)))).serialize(typeToBeSerialized),
                 typeToBeSerialized -> {
                     Serializer<Object, JSONObject> jsonObjectSerializer;
                     try {
-                        jsonObjectSerializer = reflectiveByFields(typeToBeSerialized.getClass(), _ -> Optional.of(generalSerializer()));
+                        jsonObjectSerializer = reflectiveByFields(typeToBeSerialized.getClass(), _ -> Optional.of(serializationModifier.apply(generalSerializer(serializationModifier))));
                     } catch (Exception e) {
                         throw new JsonSerializationException("could not initialize reflective serializer by fields of " + typeToBeSerialized.getClass(), e);
                     }
