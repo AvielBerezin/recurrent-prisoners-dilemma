@@ -181,7 +181,7 @@ public class SinglePlay {
                                 .intoValid(invalidChoice -> throwForInvalidChoice(player, invalidChoice))
                                 .choice();
                         Option action = forceBadActions.get(1 - player).get(iterIndex)
-                                        ? Option.COUNTERACT
+                                        ? Option.DEFLECT
                                         : choice;
                         actions.get(player).add(action);
                         playerInput.get(1 - player).println(action);
@@ -193,7 +193,7 @@ public class SinglePlay {
                                 .intoValid(invalidChoice -> throwForInvalidChoice(player, invalidChoice))
                                 .choice();
                         actions.get(player).add(forceBadActions.get(1 - player).get(iterations - 1)
-                                                ? Option.COUNTERACT
+                                                ? Option.DEFLECT
                                                 : choice);
                         playerInput.get(player).close();
                         playerInput.get(1 - player).close();

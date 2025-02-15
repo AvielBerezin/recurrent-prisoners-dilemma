@@ -81,8 +81,8 @@ public class GameDisplay extends GridPane {
     }
 
     private HPair<Rectangle> getStepRectangles(Actions actions, Attempts attempts) {
-        HPair<Boolean> actionsGoodness = actions.map(Option.COLLABORATE::equals);
-        HPair<Boolean> attemptsGoodness = attempts.map(Option.COLLABORATE::equals);
+        HPair<Boolean> actionsGoodness = actions.map(Option.COOPERATE::equals);
+        HPair<Boolean> attemptsGoodness = attempts.map(Option.COOPERATE::equals);
         return HPair.zip(actionsGoodness, attemptsGoodness,
                          (action, attempt) -> action
                                               ? new Color(0.29, 0.90, 0.27, 1f)

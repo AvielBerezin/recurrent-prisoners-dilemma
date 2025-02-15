@@ -3,15 +3,12 @@ package rpd.game.results.scored;
 import rpd.game.results.Utils;
 import rpd.game.results.basic.RoundCompetitors;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class TournamentResultScored implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 0L;
     private final List<String> competitorsNames;
     private final Map<RoundCompetitors, PlayResultsScored> rounds;
     private final Map<Integer, Integer> totalScores;

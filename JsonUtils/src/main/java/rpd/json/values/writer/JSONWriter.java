@@ -31,12 +31,12 @@ public class JSONWriter {
 
             private void writeObjectElements(JSONObject jsonObject, PrintWriter printWriter) {
                 ArrayList<String> keys = new ArrayList<>(jsonObject.keySet());
-                if (keys.size() == 0) {
+                if (keys.isEmpty()) {
                     return;
                 }
-                writeJsonString(printWriter, keys.get(0));
+                writeJsonString(printWriter, keys.getFirst());
                 printWriter.write(":");
-                compactWriteToPrintWriter(jsonObject.get(keys.get(0))).accept(printWriter);
+                compactWriteToPrintWriter(jsonObject.get(keys.getFirst())).accept(printWriter);
                 for (int i = 1; i < keys.size(); i++) {
                     printWriter.write(",");
                     String key = keys.get(i);
@@ -79,10 +79,10 @@ public class JSONWriter {
             }
 
             private void writeArrayElements(JSONArray jsonArray, PrintWriter printWriter) {
-                if (jsonArray.size() == 0) {
+                if (jsonArray.isEmpty()) {
                     return;
                 }
-                compactWriteToPrintWriter(jsonArray.get(0)).accept(printWriter);
+                compactWriteToPrintWriter(jsonArray.getFirst()).accept(printWriter);
                 for (int i = 1; i < jsonArray.size(); i++) {
                     printWriter.write(",");
                     compactWriteToPrintWriter(jsonArray.get(i)).accept(printWriter);

@@ -1,12 +1,12 @@
 package rpd.player.impl;
 
 import rpd.player.Option;
-import rpd.player.Player;
+import rpd.player.StatefulPlayer;
 
-public class PlayerImpl implements Player {
+public class PlayerImpl implements StatefulPlayer {
     @Override
     public Option opening() {
-        return Option.COLLABORATE;
+        return Option.COOPERATE;
     }
 
     @Override

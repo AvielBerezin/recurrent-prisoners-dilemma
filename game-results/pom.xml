@@ -8,7 +8,7 @@
 
     <parent>
         <groupId>aviel.rpd</groupId>
-        <artifactId>aggregator</artifactId>
+        <artifactId>builder</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

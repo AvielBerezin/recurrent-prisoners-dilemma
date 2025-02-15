@@ -51,12 +51,12 @@ public record PlayResults(FirstStep firstStep,
 
     private int getScore(Option action, Option experience) {
         int actionIndex = switch (action) {
-            case COLLABORATE -> 0;
-            case COUNTERACT -> 1;
+            case COOPERATE -> 0;
+            case DEFLECT -> 1;
         };
         int experienceIndex = switch (experience) {
-            case COLLABORATE -> 0;
-            case COUNTERACT -> 1;
+            case COOPERATE -> 0;
+            case DEFLECT -> 1;
         };
         List<List<Integer>> scoreMatrix = List.of(List.of(1, 0),
                                                   List.of(2, 0));
