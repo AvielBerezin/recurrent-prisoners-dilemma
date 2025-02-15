@@ -26,6 +26,10 @@ public class Serializers {
         return JSONString::new;
     }
 
+    public static <JavaEnum extends Enum<JavaEnum>> Serializer<JavaEnum, JSONString> enumSerializer() {
+        return typeToBeSerialized -> new JSONString(typeToBeSerialized.name());
+    }
+
     public static Serializer<List<?>, JSONArray> listSerializer(Serializer<Object, ? extends JSONValue> entrySerializer) {
         return typeToBeSerialized -> {
             LinkedList<JSONValue> serializedEntries = new LinkedList<>();
@@ -101,6 +105,7 @@ public class Serializers {
                 generalize(Boolean.class, booleanSerializer()),
                 generalize(Number.class, numberSerializer()),
                 generalize(String.class, stringSerializer()),
+                generalize(Enum.class, enumSerializer()),
                 generalize((Class<Map<?, ?>>) (Object) Map.class, generalizeMap(mapSerializer(_ -> Optional.of(serializationModifier.apply(generalSerializer(serializationModifier)))))),
                 typeToBeSerialized -> generalize((Class<List<?>>) (Object) List.class, listSerializer(serializationModifier.apply(generalSerializer(serializationModifier)))).serialize(typeToBeSerialized),
                 typeToBeSerialized -> {
