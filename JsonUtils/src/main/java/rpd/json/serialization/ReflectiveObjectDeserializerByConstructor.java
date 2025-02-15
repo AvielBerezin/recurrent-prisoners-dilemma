@@ -19,7 +19,7 @@ public class ReflectiveObjectDeserializerByConstructor<JavaClass> implements Des
     public ReflectiveObjectDeserializerByConstructor(Class<JavaClass> aClass,
                                                      Function<Field, Deserializer<JSONValue, Object>> fieldDeserializer) {
         classToReflectUpon = aClass;
-        fields = Utils.getDynamicFieldsExpectDistinctGrantAccess(classToReflectUpon);
+        fields = Utils.getDynamicFieldsExpectDistinct(classToReflectUpon);
         constructor = findSuitingConstructor(aClass, fields);
         try {
             constructor.setAccessible(true);

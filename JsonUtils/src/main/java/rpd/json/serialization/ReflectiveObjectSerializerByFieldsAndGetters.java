@@ -6,18 +6,18 @@ import rpd.reflective.Utils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class ReflectiveObjectSerializerByFields<JavaClass> implements Serializer<JavaClass, JSONObject> {
+public class ReflectiveObjectSerializerByFieldsAndGetters<JavaClass> implements Serializer<JavaClass, JSONObject> {
     private final Function<Field, Optional<? extends Serializer<Object, ? extends JSONValue>>> fieldSerializer;
-    private final List<Field> fields;
+    private final Map<String, Utils.ValueFetcher> valueFetchers;
 
-    public ReflectiveObjectSerializerByFields(Class<? extends JavaClass> classToReflectUpon,
-                                              Function<Field, Optional<? extends Serializer<Object, ? extends JSONValue>>> fieldSerializer) {
+    public ReflectiveObjectSerializerByFieldsAndGetters(Class<? extends JavaClass> classToReflectUpon,
+                                                        Function<Field, Optional<? extends Serializer<Object, ? extends JSONValue>>> fieldSerializer) {
         this.fieldSerializer = fieldSerializer;
-        fields = Utils.getDynamicFieldsExpectDistinctGrantAccess(classToReflectUpon);
+        valueFetchers = Utils.getValueFetchers(classToReflectUpon);
     }
 
     @Override
@@ -27,18 +27,19 @@ public class ReflectiveObjectSerializerByFields<JavaClass> implements Serializer
 
     private HashMap<String, JSONValue> serializeFields(JavaClass javaClassToBeSerialized) throws JsonSerializationException {
         HashMap<String, JSONValue> map = new HashMap<>();
-        for (Field field : fields) {
-            Optional<? extends Serializer<Object, ? extends JSONValue>> serializer = fieldSerializer.apply(field);
+        for (String fieldName : valueFetchers.keySet()) {
+            Utils.ValueFetcher valueFetcher = valueFetchers.get(fieldName);
+            Optional<? extends Serializer<Object, ? extends JSONValue>> serializer = fieldSerializer.apply(valueFetcher.field());
             Object value;
             try {
-                value = field.get(javaClassToBeSerialized);
+                value = valueFetcher.fetch(javaClassToBeSerialized);
             } catch (Exception e) {
-                throw new JsonSerializationException("field is inaccessible", e);
+                throw new JsonSerializationException("fetching field failed", e);
             }
             if (serializer.isEmpty()) {
                 continue;
             }
-            map.put(field.getName(), serializer.get().serialize(value));
+            map.put(fieldName, serializer.get().serialize(value));
         }
         return map;
     }

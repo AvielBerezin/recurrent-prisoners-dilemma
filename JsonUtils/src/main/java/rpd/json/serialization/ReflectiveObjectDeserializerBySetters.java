@@ -19,7 +19,7 @@ public class ReflectiveObjectDeserializerBySetters<JavaClass> implements Deseria
 
     public ReflectiveObjectDeserializerBySetters(Class<JavaClass> aClass,
                                                  Function<Field, Deserializer<JSONValue, Object>> fieldDeserializer) {
-        fields = Utils.getDynamicFieldsExpectDistinctGrantAccess(aClass);
+        fields = Utils.getDynamicFieldsExpectDistinct(aClass);
         setters = Utils.getSetters(aClass);
         this.fieldDeserializer = fieldDeserializer;
         try {

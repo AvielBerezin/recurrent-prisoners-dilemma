@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class Serializers {
     public static <JavaClass> Serializer<JavaClass, JSONObject> reflectiveByFields(Class<? extends JavaClass> classToReflectUpon,
                                                                                    Function<Field, Optional<? extends Serializer<Object, ? extends JSONValue>>> fieldSerializer) {
-        return new ReflectiveObjectSerializerByFields<>(classToReflectUpon, fieldSerializer);
+        return new ReflectiveObjectSerializerByFieldsAndGetters<>(classToReflectUpon, fieldSerializer);
     }
 
     public static Serializer<Number, JSONNumber> numberSerializer() {
